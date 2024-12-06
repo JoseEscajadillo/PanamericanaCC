@@ -1,0 +1,53 @@
+import unittest
+import pandas as pd
+import numpy as np
+
+df = pd.read_excel("qtable.xlsx", header=None, skiprows=1)
+
+qtable = np.zeros((9,3))
+
+#print(df)
+
+np_array = df.values
+
+#print(np_array)
+
+#print(np_array[:, 1:4])
+
+qtable[:, :] = np_array[:, 1:4]
+
+qtable_3d = qtable.reshape((3, 3, 3))
+
+qtable_3d = np.round(qtable_3d)
+
+qtable_3d = qtable_3d.astype(int)
+
+print(qtable_3d)
+
+class Test (unittest.TestCase):
+    def test_mov_der(self):
+        #[0, 0, 2]
+        a = 2
+        self.assertEqual(a, qtable_3d[0][0][2])
+
+    def test_mov_izq(self):
+        #[2, 2, 0]
+        a = 0
+        self.assertEqual(a, qtable_3d[2][2][0])
+    
+    def test_no_mov(self):
+        #[0, 1, 1]
+        #[0, 2, 1]
+        #[1, 0, 1]
+        #[1, 2, 1]
+
+        a = 1
+        self.assertEqual(a, qtable_3d[0][1][1])
+        self.assertEqual(a, qtable_3d[0][2][1])
+        self.assertEqual(a, qtable_3d[1][0][1])
+        self.assertEqual(a, qtable_3d[0][2][1])
+
+
+
+if __name__ == '__main__':
+    unittest.main()
